@@ -4,7 +4,7 @@ __author__ = 'tomo'
 import xively
 import datetime
 
-api = xively.XivelyAPIClient("QpKpTZHevDyfyADEu7bwECsJCiSyB4x57M8C9UFawDODZdEc")
+api = xively.XivelyAPIClient("API-Key")
 feed = api.feeds.get(1495248008)
 list(feed.datastreams)
 
