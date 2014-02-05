@@ -1,7 +1,14 @@
 
 package com.xively.android.consumer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.arnx.jsonic.JSON;
+
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -19,6 +26,8 @@ import android.widget.Toast;
 
 import com.xively.android.service.IHttpService;
 import com.xively.android.service.Response;
+import com.xively.pojo.DataPoints;
+import com.xively.pojo.Datapoint;
 import com.xively.pojo.Feed;
 
 /**
@@ -72,6 +81,35 @@ public class DemoActivity extends Activity {
                     Log.i(TAG, "LOCATION    : " + feed.getLocation().getLat() + ", "
                             + feed.getLocation().getLon());
                     Log.i(TAG, "DATE/JST    : " + feed.getUpdateLocal().toString());
+                    resultField.setText(response.getContent());
+                }
+            }
+        });
+
+        Button button2 = (Button) findViewById(R.id.doService2);
+        button2.setOnClickListener(new OnClickListener() {
+            TextView resultField = (TextView) findViewById(R.id.result);
+
+            public void onClick(View v) {
+                Response response = null;
+
+                try {
+                    service.setApiKey(myApiKey);
+                    List parameters = new ArrayList();
+                    parameters.add(new BasicNameValuePair("duration", "6hours"));
+                    parameters.add(new BasicNameValuePair("interval", "0"));
+                    String query = URLEncodedUtils.format(parameters, "UTF-8");
+                    response = service.getDatapoints(myFeedId, "Humidity", query);
+                } catch (RemoteException e) {
+                    Log.e(DemoActivity.TAG, "onClick failed", e);
+                }
+
+                if (response != null) {
+                    DataPoints points = JSON.decode(response.getContent(), DataPoints.class);
+                    for (Datapoint point : points.getDatapoints()) {
+                        Log.i(TAG, "DATE/TIME: " + point.getAtLoacl().toString() + ", VALUE: "
+                                + point.getValue());
+                    }
                     resultField.setText(response.getContent());
                 }
             }

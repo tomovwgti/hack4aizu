@@ -20,9 +20,8 @@ print('%s, ' % feed.location.lat + '%s ' % feed.location.lon)
 
 
 ## 最新から過去の情報を取得
-start = datetime.datetime.utcnow()
 stream = feed.datastreams[3]  # Pressureの場合
-points = stream.datapoints.history(end=start, limit=20, duration='6hours', interval=0)
+points = stream.datapoints.history(duration='6hours', interval=0)
 datalist = list(points)
 
 print('length: %s' % len(datalist))

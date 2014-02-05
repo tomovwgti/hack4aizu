@@ -283,6 +283,26 @@ reply.writeInt(0);
 }
 return true;
 }
+case TRANSACTION_getDatapoints:
+{
+data.enforceInterface(DESCRIPTOR);
+int _arg0;
+_arg0 = data.readInt();
+java.lang.String _arg1;
+_arg1 = data.readString();
+java.lang.String _arg2;
+_arg2 = data.readString();
+com.xively.android.service.Response _result = this.getDatapoints(_arg0, _arg1, _arg2);
+reply.writeNoException();
+if ((_result!=null)) {
+reply.writeInt(1);
+_result.writeToParcel(reply, android.os.Parcelable.PARCELABLE_WRITE_RETURN_VALUE);
+}
+else {
+reply.writeInt(0);
+}
+return true;
+}
 case TRANSACTION_deleteDatapoint:
 {
 data.enforceInterface(DESCRIPTOR);
@@ -807,6 +827,31 @@ _data.recycle();
 }
 return _result;
 }
+@Override public com.xively.android.service.Response getDatapoints(int feedId, java.lang.String datastreamId, java.lang.String urlParam) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+com.xively.android.service.Response _result;
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeInt(feedId);
+_data.writeString(datastreamId);
+_data.writeString(urlParam);
+mRemote.transact(Stub.TRANSACTION_getDatapoints, _data, _reply, 0);
+_reply.readException();
+if ((0!=_reply.readInt())) {
+_result = com.xively.android.service.Response.CREATOR.createFromParcel(_reply);
+}
+else {
+_result = null;
+}
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+return _result;
+}
 @Override public com.xively.android.service.Response deleteDatapoint(int feedId, java.lang.String datastreamId, java.lang.String datapointAt) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
@@ -1077,17 +1122,18 @@ static final int TRANSACTION_deleteDatastream = (android.os.IBinder.FIRST_CALL_T
 static final int TRANSACTION_createDatapoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
 static final int TRANSACTION_updateDatapoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
 static final int TRANSACTION_getDatapoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
-static final int TRANSACTION_deleteDatapoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
-static final int TRANSACTION_createKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
-static final int TRANSACTION_updateKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
-static final int TRANSACTION_listKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
-static final int TRANSACTION_getKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
-static final int TRANSACTION_deleteKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
-static final int TRANSACTION_createTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
-static final int TRANSACTION_updateTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
-static final int TRANSACTION_listTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
-static final int TRANSACTION_getTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 23);
-static final int TRANSACTION_deleteTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 24);
+static final int TRANSACTION_getDatapoints = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+static final int TRANSACTION_deleteDatapoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
+static final int TRANSACTION_createKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+static final int TRANSACTION_updateKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+static final int TRANSACTION_listKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
+static final int TRANSACTION_getKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
+static final int TRANSACTION_deleteKey = (android.os.IBinder.FIRST_CALL_TRANSACTION + 20);
+static final int TRANSACTION_createTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 21);
+static final int TRANSACTION_updateTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 22);
+static final int TRANSACTION_listTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 23);
+static final int TRANSACTION_getTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 24);
+static final int TRANSACTION_deleteTrigger = (android.os.IBinder.FIRST_CALL_TRANSACTION + 25);
 }
 public void setApiKey(java.lang.String apiKey) throws android.os.RemoteException;
 public com.xively.android.service.Response createFeed(java.lang.String body) throws android.os.RemoteException;
@@ -1103,6 +1149,7 @@ public com.xively.android.service.Response deleteDatastream(int feedId, java.lan
 public com.xively.android.service.Response createDatapoint(int feedId, java.lang.String datastreamId, java.lang.String body) throws android.os.RemoteException;
 public com.xively.android.service.Response updateDatapoint(int feedId, java.lang.String datastreamId, java.lang.String datapointAt, java.lang.String body) throws android.os.RemoteException;
 public com.xively.android.service.Response getDatapoint(int feedId, java.lang.String datastreamId, java.lang.String datapointAt) throws android.os.RemoteException;
+public com.xively.android.service.Response getDatapoints(int feedId, java.lang.String datastreamId, java.lang.String urlParam) throws android.os.RemoteException;
 public com.xively.android.service.Response deleteDatapoint(int feedId, java.lang.String datastreamId, java.lang.String datapointAt) throws android.os.RemoteException;
 public com.xively.android.service.Response createKey(java.lang.String body) throws android.os.RemoteException;
 public com.xively.android.service.Response updateKey(java.lang.String keyId, java.lang.String body) throws android.os.RemoteException;

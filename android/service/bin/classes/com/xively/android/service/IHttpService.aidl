@@ -20,6 +20,7 @@ interface IHttpService {
     Response createDatapoint(in int feedId, in String datastreamId, in String body);
     Response updateDatapoint(in int feedId, in String datastreamId, in String datapointAt, in String body);
     Response getDatapoint(in int feedId, in String datastreamId, in String datapointAt);
+    Response getDatapoints(in int feedId, in String datastreamId, in String urlParam);
     Response deleteDatapoint(in int feedId, in String datastreamId, in String datapointAt);
     
     Response createKey(in String body);

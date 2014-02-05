@@ -15,6 +15,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/button1_text" />
 
+    
     <TextView
         android:id="@+id/result"
         android:layout_width="wrap_content"
@@ -24,5 +25,13 @@
         android:layout_marginTop="23dp"
         android:text="result"
         android:textSize="10sp" />
+
+    <Button
+        android:id="@+id/doService2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/doService1"
+        android:layout_toRightOf="@+id/doService1"
+        android:text="@string/button2_text" />
 
 </RelativeLayout>
