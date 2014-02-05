@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/tomo/Develop/work/aizu/android/XivelyAndroid/service/src/com/xively/android/service/IHttpService.aidl
+ * Original file: /Users/tomo/Develop/work/aizu/android/service/src/com/xively/android/service/IHttpService.aidl
  */
 package com.xively.android.service;
 public interface IHttpService extends android.os.IInterface

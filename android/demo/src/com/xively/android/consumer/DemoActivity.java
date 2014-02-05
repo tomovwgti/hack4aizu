@@ -1,6 +1,7 @@
 
 package com.xively.android.consumer;
 
+import net.arnx.jsonic.JSON;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.xively.android.service.IHttpService;
 import com.xively.android.service.Response;
+import com.xively.pojo.Feed;
 
 /**
  * A primitive activity to demo simple remote client connection to the Xively's
@@ -59,6 +61,17 @@ public class DemoActivity extends Activity {
                 }
 
                 if (response != null) {
+                    Feed feed = JSON.decode(response.getContent(), Feed.class);
+                    Log.i(TAG, "DATE/UTC    : " + feed.getUpdated());
+                    Log.i(TAG, "HUMIDITY    : " + feed.getDatastreams().get(0).getCurrent_value());
+                    Log.i(TAG, "ILLUMINATION: " + feed.getDatastreams().get(1).getCurrent_value());
+                    Log.i(TAG, "MOTION      : " + feed.getDatastreams().get(2).getCurrent_value());
+                    Log.i(TAG, "PRESSURE    : " + feed.getDatastreams().get(3).getCurrent_value());
+                    Log.i(TAG, "SOUND       : " + feed.getDatastreams().get(4).getCurrent_value());
+                    Log.i(TAG, "TEMPERATURE : " + feed.getDatastreams().get(5).getCurrent_value());
+                    Log.i(TAG, "LOCATION    : " + feed.getLocation().getLat() + ", "
+                            + feed.getLocation().getLon());
+                    Log.i(TAG, "DATE/JST    : " + feed.getUpdateLocal().toString());
                     resultField.setText(response.getContent());
                 }
             }
