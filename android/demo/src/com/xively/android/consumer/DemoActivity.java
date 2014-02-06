@@ -60,6 +60,7 @@ public class DemoActivity extends Activity {
         button1.setOnClickListener(new OnClickListener() {
             TextView resultField = (TextView) findViewById(R.id.result);
 
+            // 最新の情報を取得
             public void onClick(View v) {
                 Response response = null;
                 try {
@@ -90,6 +91,7 @@ public class DemoActivity extends Activity {
         button2.setOnClickListener(new OnClickListener() {
             TextView resultField = (TextView) findViewById(R.id.result);
 
+            // 指定したIDの過去の情報を取得（この例は"温度"）
             public void onClick(View v) {
                 Response response = null;
 
@@ -99,7 +101,7 @@ public class DemoActivity extends Activity {
                     parameters.add(new BasicNameValuePair("duration", "6hours"));
                     parameters.add(new BasicNameValuePair("interval", "0"));
                     String query = URLEncodedUtils.format(parameters, "UTF-8");
-                    response = service.getDatapoints(myFeedId, "Humidity", query);
+                    response = service.getDatapoints(myFeedId, "Temperature", query);
                 } catch (RemoteException e) {
                     Log.e(DemoActivity.TAG, "onClick failed", e);
                 }
