@@ -20,7 +20,9 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +43,10 @@ public class DemoActivity extends Activity {
     IHttpService service;
     HttpServiceConnection connection;
 
+    private TextView mResultField;
+    private ListView mListView;
+    private ArrayList<String> mListString;
+
     // API-Key
     private final String myApiKey = "API-Key";
     // Feed ID
@@ -54,11 +60,14 @@ public class DemoActivity extends Activity {
         setContentView(R.layout.activity_demo);
 
         initService();
+        mResultField = (TextView) findViewById(R.id.result);
+        mListView = (ListView) findViewById(R.id.listView1);
+        mListView.setVisibility(View.INVISIBLE);
+        mListString = new ArrayList<String>();
 
         // Setup the UI
         Button button1 = (Button) findViewById(R.id.doService1);
         button1.setOnClickListener(new OnClickListener() {
-            TextView resultField = (TextView) findViewById(R.id.result);
 
             // 最新の情報を取得
             public void onClick(View v) {
@@ -69,27 +78,50 @@ public class DemoActivity extends Activity {
                 } catch (RemoteException e) {
                     Log.e(DemoActivity.TAG, "onClick failed", e);
                 }
-
                 if (response != null) {
                     Feed feed = JSON.decode(response.getContent(), Feed.class);
-                    Log.i(TAG, "DATE/UTC    : " + feed.getUpdated());
-                    Log.i(TAG, "HUMIDITY    : " + feed.getDatastreams().get(0).getCurrent_value());
-                    Log.i(TAG, "ILLUMINATION: " + feed.getDatastreams().get(1).getCurrent_value());
-                    Log.i(TAG, "MOTION      : " + feed.getDatastreams().get(2).getCurrent_value());
-                    Log.i(TAG, "PRESSURE    : " + feed.getDatastreams().get(3).getCurrent_value());
-                    Log.i(TAG, "SOUND       : " + feed.getDatastreams().get(4).getCurrent_value());
-                    Log.i(TAG, "TEMPERATURE : " + feed.getDatastreams().get(5).getCurrent_value());
-                    Log.i(TAG, "LOCATION    : " + feed.getLocation().getLat() + ", "
+
+                    mListString.clear();
+                    mListString.add("DATE/UTC    : " + feed.getUpdated());
+                    mListString.add("HUMIDITY    : "
+                            + feed.getDatastreams().get(0).getCurrent_value());
+                    mListString.add("ILLUMINATION: "
+                            + feed.getDatastreams().get(1).getCurrent_value());
+                    mListString.add("MOTION      : "
+                            + feed.getDatastreams().get(2).getCurrent_value());
+                    mListString.add("PRESSURE    : "
+                            + feed.getDatastreams().get(3).getCurrent_value());
+                    mListString.add("SOUND       : "
+                            + feed.getDatastreams().get(4).getCurrent_value());
+                    mListString.add("TEMPERATURE : "
+                            + feed.getDatastreams().get(5).getCurrent_value());
+                    mListString.add("LOCATION    : " + feed.getLocation().getLat() + ", "
                             + feed.getLocation().getLon());
-                    Log.i(TAG, "DATE/JST    : " + feed.getUpdateLocal().toString());
-                    resultField.setText(response.getContent());
+                    mListString.add("DATE/JST    : " + feed.getUpdateLocal().toString());
+
+                    Log.d(TAG, "DATE/UTC    : " + feed.getUpdated());
+                    Log.d(TAG, "HUMIDITY    : " + feed.getDatastreams().get(0).getCurrent_value());
+                    Log.d(TAG, "ILLUMINATION: " + feed.getDatastreams().get(1).getCurrent_value());
+                    Log.d(TAG, "MOTION      : " + feed.getDatastreams().get(2).getCurrent_value());
+                    Log.d(TAG, "PRESSURE    : " + feed.getDatastreams().get(3).getCurrent_value());
+                    Log.d(TAG, "SOUND       : " + feed.getDatastreams().get(4).getCurrent_value());
+                    Log.d(TAG, "TEMPERATURE : " + feed.getDatastreams().get(5).getCurrent_value());
+                    Log.d(TAG, "LOCATION    : " + feed.getLocation().getLat() + ", "
+                            + feed.getLocation().getLon());
+                    Log.d(TAG, "DATE/JST    : " + feed.getUpdateLocal().toString());
+                    mResultField.setVisibility(View.GONE);
+                    mResultField.setText(response.getContent());
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(DemoActivity.this,
+                            android.R.layout.simple_list_item_1, mListString);
+                    mListView.setAdapter(adapter);
+                    mListView.setVisibility(View.VISIBLE);
                 }
             }
         });
 
         Button button2 = (Button) findViewById(R.id.doService2);
         button2.setOnClickListener(new OnClickListener() {
-            TextView resultField = (TextView) findViewById(R.id.result);
 
             // 指定したIDの過去の情報を取得（この例は"温度"）
             public void onClick(View v) {
@@ -108,11 +140,19 @@ public class DemoActivity extends Activity {
 
                 if (response != null) {
                     DataPoints points = JSON.decode(response.getContent(), DataPoints.class);
+                    mListString.clear();
                     for (Datapoint point : points.getDatapoints()) {
+                        mListString.add("DATE/TIME: " + point.getAtLoacl().toString() + ", VALUE: "
+                                + point.getValue());
                         Log.i(TAG, "DATE/TIME: " + point.getAtLoacl().toString() + ", VALUE: "
                                 + point.getValue());
                     }
-                    resultField.setText(response.getContent());
+                    mResultField.setVisibility(View.GONE);
+                    mResultField.setText(response.getContent());
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(DemoActivity.this,
+                            android.R.layout.simple_list_item_1, mListString);
+                    mListView.setAdapter(adapter);
+                    mListView.setVisibility(View.VISIBLE);
                 }
             }
         });
